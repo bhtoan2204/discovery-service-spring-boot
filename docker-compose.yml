@@ -1,5 +1,17 @@
 version: '3.8'
 services:
+  axon-server:
+    image: axoniq/axonserver
+    hostname: axon-server
+    container_name: distributed-axon-server
+    healthcheck:
+      test: curl -f http://localhost:8024/actuator/health || exit 1;
+    ports:
+      - 8024:8024
+      - 8124:8124
+    volumes:
+      - ./docker/axonserver/config:/axonserver/config
+
   zookeeper:
     image: confluentinc/cp-zookeeper
     container_name: zookeeper
@@ -53,3 +65,7 @@ services:
       dockerfile: ./ProductsService/Dockerfile
     depends_on:
       - mysql-products
+
+volumes:
+    mysql_data:
+
